@@ -1,56 +1,62 @@
 <!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Playlist Estética</title>
 <style>
   :root {
-    --spotify-height: 152px; /* Cambia a 380px si prefieres grande */
-    --pill: rgba(255,255,255,0.28);
-    --shadow: 0 8px 20px rgba(36,26,57,0.08);
-    --a: #f0eaff; --b: #dcd0ff; --c: #fbe7ff;
-    --d: #ffeef8; --e: #eaf6ff; --f: #eafff6;
+    --spotify-height: 152px; /* 152px compacto | 380px grande */
+    --bleed: 3px;            /* cuánto “sangra” el iframe para recortar el borde */
+    --a:#f0eaff; --b:#dcd0ff; --c:#fbe7ff; --d:#ffeef8; --e:#eaf6ff; --f:#eafff6;
   }
+
+  /* Reset + centrado */
   *, html, body { margin:0; padding:0; height:100%; }
   body {
-    font-family: 'Quicksand', sans-serif;
-    background-color: #faf7ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display:flex; align-items:center; justify-content:center;
+    background:#faf7ff; font-family: Quicksand, Arial, sans-serif;
   }
+
+  /* Fondo holográfico suave */
   .bg {
-    position: fixed; inset: 0; overflow: hidden; z-index:0;
+    position:fixed; inset:0; z-index:0; overflow:hidden;
     background: conic-gradient(from 0deg, var(--a),var(--b),var(--c),var(--d),var(--e),var(--f),var(--b),var(--a));
     filter: blur(60px) saturate(110%) brightness(105%);
-    animation: spin 45s linear infinite;
-    opacity: 0.9;
+    animation: spin 45s linear infinite; opacity:.9;
   }
   @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-  .player-wrapper {
-    z-index: 1;
-    background: var(--pill);
-    backdrop-filter: blur(10px) saturate(115%);
-    border-radius: 20px;
-    padding: 8px;
-    box-shadow: var(--shadow);
-    max-width: 800px;
-    width: 90%;
-  }
-  .player-wrapper iframe {
-    width: 100%;
+
+  /* Contenedor del player: sin fondo, solo recorte y radio */
+  .player-wrap {
+    position:relative; z-index:1;
+    width:min(820px, 92vw);
     height: var(--spotify-height);
-    border: none;
-    border-radius: 12px;
+    border-radius:18px;
+    overflow:hidden;                 /* recorta lo que sangra el iframe */
+    box-shadow: 0 8px 20px rgba(36,26,57,.08);
+  }
+
+  /* Iframe “sangrado” para comer el hairline del borde */
+  .player-wrap iframe {
+    position:absolute; top: calc(-1 * var(--bleed)); left: calc(-1 * var(--bleed));
+    width: calc(100% + var(--bleed) * 2);
+    height: calc(100% + var(--bleed) * 2);
+    border:0; display:block;
   }
 </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="player-wrapper">
-    <iframe src="https://open.spotify.com/embed/playlist/4My2ToqWQx6NgiCVDywHMU"
-            allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"></iframe>
+  <div class="bg" aria-hidden="true"></div>
+
+  <div class="player-wrap">
+    <iframe
+      src="https://open.spotify.com/embed/playlist/4My2ToqWQx6NgiCVDywHMU"
+      allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
   </div>
 </body>
 </html>
+
